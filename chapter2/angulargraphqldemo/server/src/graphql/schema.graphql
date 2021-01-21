@@ -1,0 +1,67 @@
+type User {
+    id: ID!
+    fullName: String!
+    bio: String
+    email: String!
+    username: String!
+    password: String!
+    image: String
+    coverImage: String
+    postsCount: Int!
+}
+
+type Post {
+    id: ID!
+    text: String
+    image: String
+    author: ID!
+    commentsCount: Int!
+    likesCount: Int!
+    latestComment: Comment
+    latestLike: String
+    createdAt: String!  
+}
+type Comment {
+    id: ID!
+    comment: String!
+    author: ID!
+    post: ID!
+    createdAt: String!
+}
+type Like {
+    id: ID!
+    user: ID!
+    post: ID!
+}
+
+type Notification {
+    id: ID!
+    text: String!
+    post: ID!
+    createdAt: String!
+}
+
+type Query {
+    message: String!
+    
+    getUser(userId: ID!): User! 
+    getPostsByUserId(userId: ID!, skip: Int, limit: Int): [Post]    
+    getFeed(skip: Int, limit: Int): [Post]
+    getNotificationsByUserId(userId: ID! skip: Int, limit: Int): [Notification]
+    getCommentsByPostId(postId: ID!, skip: Int, limit: Int): [Comment]
+    getLikesByPostId(postId: ID!, skip: Int, limit: Int): [Like]
+    searchUsers(searchQuery: String): [User]
+}
+
+type Mutation {
+    post(text: String, image: String, authorId: ID!): Post
+    removePost(postID: ID!): ID 
+    comment(comment: String!, author: ID!, postId: ID!): Comment
+    removeComment(id: ID!): ID
+    like(user: ID!, post: ID!): Like
+    removeLike(id: ID!): ID
+    removeNotification(id: ID!): ID
+}
+
+
+
