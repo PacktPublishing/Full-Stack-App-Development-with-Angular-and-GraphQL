@@ -1,0 +1,102 @@
+enum NotificationType {
+   LIKE
+   COMMENT
+   POST
+   FRIENDSHIP
+}
+
+type User {
+    id: ID!
+    fullName: String!
+    email: String!
+    username: String!
+    password: String!
+    image: String!
+    coverImage: String!
+}
+type AuthPayload {
+     currentUser: User!
+     token: String!
+}
+
+type Post {
+    id: ID!
+    text: String
+    image: String
+    author: User!
+    commentsCount: Int!
+    likesCount: Int!
+    createdAt: String!  
+}
+type Comment {
+    id: ID!
+    comment: String!
+    author: User!
+    post: ID!
+    createdAt: String!
+}
+type Like {
+    id: ID!
+    user: User!
+    post: ID!
+}
+
+type Notification {
+    id: ID!
+    user: ID
+    author: User
+    post: Post
+    like: Like
+    friend: User
+    comment: Comment
+    type: NotificationType
+    seen: Boolean
+    createdAt: String!
+}
+type Message {
+    id: ID!
+    message: String!
+    sender: ID!
+    recipient: ID!
+    createdAt: String!
+}
+type Conversation {
+    id: ID!
+    title: String
+    messages: [Message]
+    users: [User]
+}
+
+
+type Query {
+    message: String!
+    getUser(userId: ID!): User! 
+    getFriendsByUserId(userId: ID!): [User]
+    getPostsByUserId(userId: ID!, skip: Int, limit: Int): [Post]
+    
+    getFeedByUserId(userId: ID!, skip: Int, limit: Int): [Post]
+    getNotificationsByUserId(userId: ID! skip: Int, limit: Int): [Notification]
+    getInvitesByUserId(userId: ID! skip: Int, limit: Int): [User]
+    getCommentsByPostId(postId: ID!, skip: Int, limit: Int): [Comment]
+    getLikesByPostId(postId: ID!, skip: Int, limit: Int): [Like]
+
+    searchUsers(searchQuery: String!): [User]
+
+    messagesByUserConversation(currentUserId: ID!, userID:ID!, skip: Int, limit: Int):[Message]
+
+
+}
+type Mutation {
+    signIn(email: String!, password: String!): AuthPayload
+    register(fullName: String!, email: String!, password: String!): AuthPayload 
+    addPost(text: String, image: String, authorId: ID!): Post
+    addComment(comment: String!, postId: ID!): Comment
+    deleteComment(id: ID!): Comment
+    sendMessage(message: String!, senderId: ID!, recipientId: ID!): Message
+    createConversation(title: String, senderId: ID!, recipientId: ID!): Conversation
+    createNotification(title: String, senderId: ID!, recipientId: ID!): Conversation
+    markNotificationAsSeen(id: ID!): ID
+}
+
+https://github.com/DimiMikadze/create-social-network/tree/master/api/schema
+
